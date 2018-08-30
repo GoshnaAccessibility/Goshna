@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,8 @@ public class GateActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            //
+            String err = mContext.getResources().getString(R.string.no_flights);
+            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
         }
     };
 
@@ -91,7 +93,8 @@ public class GateActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            //
+            String err = mContext.getResources().getString(R.string.bad_gate);
+            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
 
             mSubmit.setEnabled(true);
         }

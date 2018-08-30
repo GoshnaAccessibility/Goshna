@@ -37,7 +37,7 @@ public class Goshna extends Application {
 
         @Override
         public void failure(RetrofitError error) {
-            mRegistered = false;
+            //
         }
     };
 

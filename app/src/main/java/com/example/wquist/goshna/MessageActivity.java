@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -40,7 +41,8 @@ public class MessageActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            //
+            String err = mContext.getResources().getString(R.string.no_messages);
+            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
         }
     };
 

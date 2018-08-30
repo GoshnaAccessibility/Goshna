@@ -11,4 +11,9 @@
     <string name="gate_heading">Enter your gate number:</string>
     <string name="gate_button">GO</string>
     <string name="gate_upcoming">Flights departing soon:</string>
+
+    <string name="no_server">Could not connect to the server.</string>
+    <string name="no_flights">Could not retrieve current flights from the server.</string>
+    <string name="bad_gate">The entered gate could not be found.</string>
+    <string name="no_messages">Could not retrieve announcements from the server.</string>
 </resources>
