@@ -1,6 +1,7 @@
 package com.example.wquist.goshna;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -35,7 +37,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
             @Override
             public void failure(RetrofitError error) {
-                //
+                String err = mContext.getResources().getString(R.string.no_translate);
+                Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
             }
         };
 
@@ -50,8 +53,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         public void update(Message m) {
             time.setText(m.getTime());
             flight.setText("Flight " + mFlightName);
+            body.setText(m.body);
 
-            Goshna.getTranslator().translate(Goshna.TRANSLATE_KEY, m.body, "en-es", translateCallback);
+            String lang = Locale.getDefault().getLanguage();
+            Goshna.getTranslator().translate(Goshna.TRANSLATE_KEY, m.body, lang, translateCallback);
         }
     }
 

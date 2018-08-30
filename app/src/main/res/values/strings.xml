@@ -16,4 +16,5 @@
     <string name="no_flights">Could not retrieve current flights from the server.</string>
     <string name="bad_gate">The gate could not be found.</string>
     <string name="no_messages">Could not retrieve announcements from the server.</string>
+    <string name="no_translate">Could not translate announcements.</string>
 </resources>
