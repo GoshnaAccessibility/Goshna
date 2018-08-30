@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Goshna</string>
+
+    <string name="title_activity_gate">Goshna</string>
+    <string name="title_activity_message">Announcements</string>
+    <string name="refresh">Refresh</string>
+
+    <string name="preferences">goshnaprefs</string>
+    <string name="preferences_user">user_id</string>
+
+    <string name="gate_heading">Enter your gate number:</string>
+    <string name="gate_button">GO</string>
+    <string name="gate_upcoming">Flights departing soon:</string>
+</resources>
