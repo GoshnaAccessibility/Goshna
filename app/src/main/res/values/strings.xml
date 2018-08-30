@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Goshna</string>
 
-    <string name="title_activity_gate" translatable="false">Goshna</string>
+    <string name="title_activity_gate">Gate</string>
     <string name="title_activity_message">Announcements</string>
     <string name="refresh">Refresh</string>
 

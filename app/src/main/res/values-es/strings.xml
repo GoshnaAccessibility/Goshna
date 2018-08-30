@@ -10,4 +10,5 @@
     <string name="bad_gate">La sala no encontrada.</string>
     <string name="no_messages">No se pudo obtener los anuncios del servidor.</string>
     <string name="no_translate">No se pudo traducir los anuncios.</string>
+    <string name="title_activity_gate">Sala</string>
 </resources>

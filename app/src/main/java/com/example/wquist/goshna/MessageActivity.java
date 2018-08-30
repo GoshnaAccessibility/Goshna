@@ -41,8 +41,7 @@ public class MessageActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            String err = mContext.getResources().getString(R.string.no_messages);
-            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, R.string.no_messages, Toast.LENGTH_LONG).show();
         }
     };
 

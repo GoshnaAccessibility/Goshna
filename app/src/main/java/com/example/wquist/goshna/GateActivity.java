@@ -50,8 +50,7 @@ public class GateActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            String err = mContext.getResources().getString(R.string.no_flights);
-            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, R.string.no_flights, Toast.LENGTH_LONG).show();
         }
     };
 
@@ -93,9 +92,7 @@ public class GateActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            String err = mContext.getResources().getString(R.string.bad_gate);
-            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
-
+            Toast.makeText(mContext, R.string.bad_gate, Toast.LENGTH_LONG).show();
             mSubmit.setEnabled(true);
         }
     };
