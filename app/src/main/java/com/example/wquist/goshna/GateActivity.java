@@ -39,9 +39,18 @@ public class GateActivity extends AppCompatActivity {
 
     private Flight mTarget;
 
+    private DialogInterface.OnClickListener retryYesListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            Goshna.getApi().getAllFlights(allFlightsCallback);
+        }
+    };
+
     private Callback<FlightResponse> allFlightsCallback = new Callback<FlightResponse>() {
         @Override
         public void success(FlightResponse response, Response clientResponse) {
+            mSubmit.setEnabled(true);
+
             mFlights.clear();
             mFlights.addAll(response.flights);
 
@@ -50,7 +59,14 @@ public class GateActivity extends AppCompatActivity {
 
         @Override
         public void failure(RetrofitError error) {
-            Toast.makeText(mContext, R.string.no_flights, Toast.LENGTH_LONG).show();
+            mSubmit.setEnabled(false);
+
+            new AlertDialog.Builder(mContext) // FIXME: needs localization
+                    .setTitle("Connection Error")
+                    .setMessage("Could not connect to the Goshna airport server.")
+                    .setPositiveButton(R.string.refresh, retryYesListener)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     };
 
@@ -80,7 +96,7 @@ public class GateActivity extends AppCompatActivity {
             Flight f = response.flights.get(0);
             mTarget = f;
 
-            new AlertDialog.Builder(mContext)
+            new AlertDialog.Builder(mContext) // FIXME: needs localization
                     .setTitle("Flight " + f.airline_short + f.number + " at Gate " + f.gate)
                     .setMessage("You entered the gate for a " + f.airline + " flight to " +
                             f.dest_short + " at " + f.getTime() + ". Is this the correct flight?")
@@ -119,6 +135,7 @@ public class GateActivity extends AppCompatActivity {
         mAdapter = new FlightsAdapter(this, mFlights);
         mRecycler.setAdapter(mAdapter);
 
+        mSubmit.setEnabled(false);
         Goshna.getApi().getAllFlights(allFlightsCallback);
     }
 
