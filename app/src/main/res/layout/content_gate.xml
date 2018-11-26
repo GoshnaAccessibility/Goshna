@@ -17,25 +17,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!-- Start UI for demo purposes: UX for fake airline 'Goshna' -->
+            <TextView
+                android:id="@+id/txtAirlineName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="cursive"
+                android:padding="@dimen/default_margin"
+                android:text="@string/airline_name"
+                android:textAlignment="viewEnd"
+                android:textSize="32sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <!-- End UI for demo purposes: UX for fake airline 'Goshna' -->
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginTop="@dimen/default_margin"
+                android:labelFor="@+id/gate"
                 android:text="@string/gate_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/txtAirlineName" />
 
             <EditText
                 android:id="@+id/gate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/large_margin"
-                android:layout_marginEnd="@dimen/default_margin"
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginTop="@dimen/large_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/large_margin"
                 android:ems="10"
                 android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -49,10 +63,10 @@
                 android:id="@+id/submit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/large_margin"
-                android:layout_marginEnd="@dimen/default_margin"
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginTop="@dimen/large_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/large_margin"
                 android:onClick="submit"
                 android:text="@string/gate_button"
                 app:layout_constraintBottom_toBottomOf="parent"
