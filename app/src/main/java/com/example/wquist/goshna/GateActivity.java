@@ -26,6 +26,7 @@ import com.example.wquist.goshna.ApiResponse.FlightResponse;
 public class GateActivity extends AppCompatActivity {
     public static final String FLIGHT_ID = "com.example.wquist.goshna.FLIGHT_ID";
     public static final String FLIGHT_NAME = "com.example.wquist.goshna.FLIGHT_NAME";
+    public static final String GATE_NUMBER = "com.example.wquist.goshna.GATE_NUMBER";
 
     private Context mContext;
 
@@ -78,6 +79,7 @@ public class GateActivity extends AppCompatActivity {
             Intent it = new Intent(mContext, MessageActivity.class);
             it.putExtra(FLIGHT_ID, mTarget.id);
             it.putExtra(FLIGHT_NAME, mTarget.airline_short + mTarget.number);
+            it.putExtra(GATE_NUMBER, mTarget.gate);
 
             startActivity(it);
         }

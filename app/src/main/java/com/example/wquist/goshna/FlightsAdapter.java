@@ -31,6 +31,7 @@ public class FlightsAdapter extends RecyclerView.Adapter<FlightsAdapter.ViewHold
                 Intent it = new Intent(mContext, MessageActivity.class);
                 it.putExtra(GateActivity.FLIGHT_ID, mFlight.id);
                 it.putExtra(GateActivity.FLIGHT_NAME, mFlight.airline_short + mFlight.number);
+                it.putExtra(GateActivity.GATE_NUMBER, mFlight.gate);
 
                 mContext.startActivity(it);
             }

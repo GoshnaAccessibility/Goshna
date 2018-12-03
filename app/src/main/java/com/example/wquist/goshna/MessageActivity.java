@@ -24,6 +24,7 @@ public class MessageActivity extends AppCompatActivity {
     private Context mContext;
     private int mFlightId;
     private String mFlightName;
+    private String mGateNumber;
 
     private RecyclerView mRecycler;
 
@@ -58,6 +59,7 @@ public class MessageActivity extends AppCompatActivity {
         Intent i = getIntent();
         mFlightId = i.getIntExtra(GateActivity.FLIGHT_ID, -1);
         mFlightName = i.getStringExtra(GateActivity.FLIGHT_NAME);
+        mGateNumber = i.getStringExtra(GateActivity.GATE_NUMBER);
 
         mRecycler = findViewById(R.id.cards);
 
@@ -67,6 +69,9 @@ public class MessageActivity extends AppCompatActivity {
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(this, mMessages, mFlightName);
         mRecycler.setAdapter(mAdapter);
+
+        String annPrefix = getResources().getString(R.string.title_activity_message);
+        setTitle(annPrefix + ": Gate " + mGateNumber + " (" + mFlightName + ")"); // FIXME: needs localization
 
         refresh();
     }
