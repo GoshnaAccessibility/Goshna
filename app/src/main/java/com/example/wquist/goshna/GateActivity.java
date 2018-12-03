@@ -9,11 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.Key;
 import java.util.ArrayList;
 
 import retrofit.Callback;
@@ -39,6 +41,17 @@ public class GateActivity extends AppCompatActivity {
     private FlightsAdapter mAdapter;
 
     private Flight mTarget;
+
+    private EditText.OnKeyListener inputCallback = new EditText.OnKeyListener() {
+        public boolean onKey(View v, int key, KeyEvent event) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && key == KeyEvent.KEYCODE_ENTER) {
+                submit(v);
+                return true;
+            }
+
+            return false;
+        }
+    };
 
     private DialogInterface.OnClickListener retryYesListener = new DialogInterface.OnClickListener() {
         @Override
@@ -136,6 +149,8 @@ public class GateActivity extends AppCompatActivity {
         mFlights = new ArrayList<>();
         mAdapter = new FlightsAdapter(this, mFlights);
         mRecycler.setAdapter(mAdapter);
+
+        mGate.setOnKeyListener(inputCallback);
 
         mSubmit.setEnabled(false);
         Goshna.getApi().getAllFlights(allFlightsCallback);
