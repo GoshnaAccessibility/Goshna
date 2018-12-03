@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import retrofit.Callback;
@@ -60,6 +61,9 @@ public class MessageActivity extends AppCompatActivity {
         mFlightId = i.getIntExtra(GateActivity.FLIGHT_ID, -1);
         mFlightName = i.getStringExtra(GateActivity.FLIGHT_NAME);
         mGateNumber = i.getStringExtra(GateActivity.GATE_NUMBER);
+
+        TextView txtGateNumber = findViewById(R.id.announcements_gate_id);
+        txtGateNumber.setText(String.format("%s " + mGateNumber, getResources().getString(R.string.gate)));
 
         mRecycler = findViewById(R.id.cards);
 

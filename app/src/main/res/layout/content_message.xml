@@ -9,13 +9,21 @@
     tools:context="com.example.wquist.goshna.MessageActivity"
     tools:showIn="@layout/activity_message">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="8dp" />
+    <TextView
+        android:id="@+id/announcements_gate_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8sp"
+        android:layout_marginLeft="8sp"
+        android:layout_marginRight="8sp"
+        android:text="@+string/gate"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cards"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8sp"/>
 
 </LinearLayout>

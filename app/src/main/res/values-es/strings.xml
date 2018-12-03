@@ -2,6 +2,7 @@
 <resources>
     <string name="title_activity_message">Anuncios</string>
     <string name="refresh">Refrescar</string>
+    <string name="gate">Sala</string>
     <string name="gate_heading">Ingrese su número de sala:</string>
     <string name="gate_button">Ir</string>
     <string name="gate_upcoming">Salidas próximo:</string>

@@ -10,6 +10,7 @@
 
     <string name="airline_name" translatable="false">Goshna Airlines</string>
 
+    <string name="gate">Gate</string>
     <string name="gate_heading">Enter your gate number:</string>
     <string name="gate_button">GO</string>
     <string name="gate_upcoming">Flights departing soon:</string>
