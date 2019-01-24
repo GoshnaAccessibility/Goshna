@@ -40,29 +40,31 @@ public class MessageActivity extends AppCompatActivity {
         public void success(MessageResponse response, Response clientResponse) {
             // Find if message already shown or if it is new
             int iNewMessages = 0;
-            //for(int i = 0; i < response.messages.size(); i++) {
-            for(int i = response.messages.size() - 1; i >= 0; i--) {
+            for (int i = response.messages.size() - 1; i >= 0; i--) {
                 Message m = response.messages.get(i);
                 boolean bMsgExists = false;
-                for(int j = 0; j < mMessages.size(); j++) {
+                for (int j = 0; j < mMessages.size(); j++) {
                     if (m.id == mMessages.get(j).id) {
                         bMsgExists = true;
                         break;
                     }
                 }
-                if(!bMsgExists) {
+                if (!bMsgExists) {
                     mMessages.add(0, m);
                     iNewMessages++;
                 }
             }
             // update UI and Inform user, once other messages checked.
-            if(iNewMessages > 0) {
+            if (iNewMessages > 0) {
                 mAdapter.notifyDataSetChanged();
                 // UX - Vibrate to alert user to new messages.
-                if (Build.VERSION.SDK_INT >= 26) {
-                    ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE));
-                } else {
-                    ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (v != null) {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        v.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        v.vibrate(150);
+                    }
                 }
                 Toast.makeText(mContext, iNewMessages + " new messages", Toast.LENGTH_SHORT).show();
             } else {
