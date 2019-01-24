@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import retrofit.client.Response;
 import com.example.wquist.goshna.Api.Message;
 import com.example.wquist.goshna.ApiResponse.MessageResponse;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
     private Context mContext;
     private int mFlightId;
     private String mFlightName;
@@ -130,5 +132,11 @@ public class MessageActivity extends AppCompatActivity {
 
     public void refresh() {
         Goshna.getApi().getFlightMessages(mFlightId, messagesCallback);
+    }
+
+    @Override
+    public void onClick(View view) {
+        // Allow the user to acknowledge they have read the message
+        view.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
     }
 }
