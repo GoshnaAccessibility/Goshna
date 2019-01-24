@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,10 +38,36 @@ public class MessageActivity extends AppCompatActivity {
     private Callback<MessageResponse> messagesCallback = new Callback<MessageResponse>() {
         @Override
         public void success(MessageResponse response, Response clientResponse) {
-            mMessages.clear();
-            mMessages.addAll(response.messages);
-
-            mAdapter.notifyDataSetChanged();
+            // Find if message already shown or if it is new
+            int iNewMessages = 0;
+            //for(int i = 0; i < response.messages.size(); i++) {
+            for(int i = response.messages.size() - 1; i >= 0; i--) {
+                Message m = response.messages.get(i);
+                boolean bMsgExists = false;
+                for(int j = 0; j < mMessages.size(); j++) {
+                    if (m.id == mMessages.get(j).id) {
+                        bMsgExists = true;
+                        break;
+                    }
+                }
+                if(!bMsgExists) {
+                    mMessages.add(0, m);
+                    iNewMessages++;
+                }
+            }
+            // update UI and Inform user, once other messages checked.
+            if(iNewMessages > 0) {
+                mAdapter.notifyDataSetChanged();
+                // UX - Vibrate to alert user to new messages.
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
+                }
+                Toast.makeText(mContext, iNewMessages + " new messages", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, "No new messages", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
