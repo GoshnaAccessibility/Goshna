@@ -15,7 +15,7 @@ public class Message {
     }
 
     public String getTime() {
-        Date d = new Date(time * 1000);
+        Date d = new Date(time * 1000L); // must multiply by 1000 Long for Epoch/Unix to Android conversion
         return new SimpleDateFormat("HH:mm").format(d);
     }
 
