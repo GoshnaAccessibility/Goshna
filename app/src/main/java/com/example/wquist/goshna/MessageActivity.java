@@ -115,6 +115,12 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_message, menu);
         return true;
