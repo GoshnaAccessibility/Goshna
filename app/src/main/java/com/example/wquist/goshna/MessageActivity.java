@@ -109,7 +109,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         mRecycler.setAdapter(mAdapter);
 
         String annPrefix = getResources().getString(R.string.title_activity_message);
-        setTitle(annPrefix + ": Gate " + mGateNumber + " (" + mFlightName + ")"); // FIXME: needs localization
+        setTitle(annPrefix + ": " + getResources().getString(R.string.gate) + " " + mGateNumber + " (" + mFlightName + ")");
 
         refresh();
     }
