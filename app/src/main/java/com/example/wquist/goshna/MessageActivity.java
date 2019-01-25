@@ -52,6 +52,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
                 if (!bMsgExists) {
+                    m.read = false;
                     mMessages.add(0, m);
                     iNewMessages++;
                 }
@@ -137,6 +138,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         // Allow the user to acknowledge they have read the message
+        Message m = (Message) view.getTag();
+        m.read = true;
         view.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
     }
 }

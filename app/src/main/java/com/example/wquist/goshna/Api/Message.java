@@ -8,6 +8,7 @@ public class Message {
     public int id; // Server ID
     public String body;
     public int time;
+    public boolean read = false;
 
     public Message(int flight_id, int message_id, String body, int time) {
         this.flight_id = flight_id;
@@ -28,6 +29,7 @@ public class Message {
                 ", id=" + id +
                 ", body='" + body + '\'' +
                 ", time='" + time + '\'' +
+                ", read=" + read +
                 '}';
     }
 }

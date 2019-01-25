@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     private String mFlightName;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public CardView card;
         public TextView time;
         public TextView flight;
         public TextView body;
@@ -45,15 +48,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         public ViewHolder(View v) {
             super(v);
 
+            card = v.findViewById(R.id.cardMessage);
             time = v.findViewById(R.id.time);
             flight = v.findViewById(R.id.flight);
             body = v.findViewById(R.id.body);
         }
 
         public void update(Message m) {
+            card.setTag(m); // link Model with UI elem, for easier access through onclick
             time.setText(m.getTime());
             flight.setText("Flight " + mFlightName);
             body.setText(m.body);
+            if (m.read) {
+                card.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
+            } else { // NB required. Here be Dragons.
+                card.setBackgroundTintMode(PorterDuff.Mode.DARKEN);
+            }
 
             String lang = Locale.getDefault().getLanguage();
             Goshna.getTranslator().translate(Goshna.TRANSLATE_KEY, m.body, lang, translateCallback);
