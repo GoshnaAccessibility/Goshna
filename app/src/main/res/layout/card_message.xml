@@ -15,7 +15,6 @@
         android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="0dp"
-        android:backgroundTint="@android:color/holo_blue_bright"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"

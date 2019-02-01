@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -153,6 +153,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         // Allow the user to acknowledge they have read the message
         Message m = (Message) view.getTag();
         m.read = true;
-        view.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
+        view.setBackgroundColor(Color.WHITE);
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -60,9 +61,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             flight.setText("Flight " + mFlightName);
             body.setText(m.body);
             if (m.read) {
-                card.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
+                card.setBackgroundColor(Color.WHITE);
             } else { // NB required. Here be Dragons.
-                card.setBackgroundTintMode(PorterDuff.Mode.DARKEN);
+                card.setBackgroundColor(Color.argb(125, 3 ,218, 198));
             }
 
             String lang = Locale.getDefault().getLanguage();
