@@ -1,10 +1,13 @@
 package com.example.wquist.goshna;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -19,12 +22,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 import com.example.wquist.goshna.Api.Message;
 import com.example.wquist.goshna.ApiResponse.MessageResponse;
+import com.example.wquist.goshna.ApiResponse.MessageStreamTask;
 
 public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
     private Context mContext;
@@ -37,49 +37,42 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
 
-    private Callback<MessageResponse> messagesCallback = new Callback<MessageResponse>() {
-        @Override
-        public void success(MessageResponse response, Response clientResponse) {
-            // Find if message already shown or if it is new
-            int iNewMessages = 0;
-            for (int i = response.messages.size() - 1; i >= 0; i--) {
-                Message m = response.messages.get(i);
-                boolean bMsgExists = false;
-                for (int j = 0; j < mMessages.size(); j++) {
-                    if (m.id == mMessages.get(j).id) {
-                        bMsgExists = true;
-                        break;
-                    }
-                }
-                if (!bMsgExists) {
-                    m.read = false;
-                    mMessages.add(0, m);
-                    iNewMessages++;
+    @SuppressWarnings("deprecation") // v.vibrate(milliseconds) // SDK < 26
+    private void addMessagesToList(MessageResponse response) {
+        // Find if message already shown or if it is new
+        int iNewMessages = 0;
+        for (int i = response.messages.size() - 1; i >= 0; i--) {
+            Message m = response.messages.get(i);
+            boolean bMsgExists = false;
+            for (int j = 0; j < mMessages.size(); j++) {
+                if (m.id == mMessages.get(j).id) {
+                    bMsgExists = true;
+                    break;
                 }
             }
-            // update UI and Inform user, once other messages checked.
-            if (iNewMessages > 0) {
-                mAdapter.notifyDataSetChanged();
-                // UX - Vibrate to alert user to new messages.
-                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                if (v != null) {
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        v.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE));
-                    } else {
-                        v.vibrate(150);
-                    }
-                }
-                Toast.makeText(mContext, iNewMessages + " new messages", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(mContext, "No new messages", Toast.LENGTH_SHORT).show();
+            if (!bMsgExists) {
+                m.read = false;
+                mMessages.add(0, m);
+                iNewMessages++;
             }
         }
-
-        @Override
-        public void failure(RetrofitError error) {
-            Toast.makeText(mContext, R.string.no_messages, Toast.LENGTH_LONG).show();
+        // update UI and Inform user, once other messages checked.
+        if (iNewMessages > 0) {
+            mAdapter.notifyDataSetChanged();
+            // UX - Vibrate to alert user to new messages.
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (v != null) {
+                if (Build.VERSION.SDK_INT >= 26) {
+                    v.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    v.vibrate(150);
+                }
+            }
+            Toast.makeText(mContext, iNewMessages + " new messages", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, "No new messages", Toast.LENGTH_SHORT).show();
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,19 +119,33 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
+    MessageStreamTask streamTask = new MessageStreamTask() {
+        @Override
+        protected void onProgressUpdate(MessageResponse... values) {
+            for(MessageResponse msgResponse : values){
+                addMessagesToList(msgResponse);
+            }
+        }
+    };
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
             refresh();
-
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     public void refresh() {
-        Goshna.getApi().getFlightMessages(mFlightId, messagesCallback);
+        if(streamTask.getStatus() != AsyncTask.Status.RUNNING) {
+            try {
+                streamTask.execute(new URL(Goshna.getFlightMessagesStreamUrl(mFlightId)));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                Toast.makeText(mContext, R.string.no_messages, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override

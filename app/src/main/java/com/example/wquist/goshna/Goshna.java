@@ -86,4 +86,8 @@ public class Goshna extends Application {
     }
 
     public static SharedPreferences getPreferences() { return mPreferences; }
+
+    // API extensions (that don't fit with RetroFit)
+
+    public static String getFlightMessagesStreamUrl(int flight_id) { return API_ADDRESS + API_URL + "/flights/messages/" + flight_id + "/stream"; }
 }
