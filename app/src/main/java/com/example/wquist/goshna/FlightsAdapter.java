@@ -49,9 +49,9 @@ public class FlightsAdapter extends RecyclerView.Adapter<FlightsAdapter.ViewHold
         }
 
         public void update(Flight f) {
-            flight.setText("Flight " + f.airline_short + f.number);
-            gate.setText("Gate " + f.gate);
-            destination.setText("to " + f.dest_short);
+            flight.setText(mContext.getResources().getString(R.string.flight_name_prefix, f.airline_short + f.number));
+            gate.setText(mContext.getResources().getString(R.string.gate_number, f.gate));
+            destination.setText(mContext.getResources().getString(R.string.flight_to, f.dest_short));
             airline.setText(f.airline);
             departure.setText(f.getTime());
 

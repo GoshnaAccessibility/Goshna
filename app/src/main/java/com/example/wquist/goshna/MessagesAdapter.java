@@ -58,7 +58,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         public void update(Message m) {
             card.setTag(m); // link Model with UI elem, for easier access through onclick
             time.setText(m.getTime());
-            flight.setText("Flight " + mFlightName);
+            flight.setText(mContext.getResources().getString(R.string.flight_name_prefix, mFlightName));
             body.setText(m.body);
             if (m.read) {
                 card.setBackgroundColor(Color.WHITE);

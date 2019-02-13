@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="title_activity_gate">Sala</string>
     <string name="title_activity_message">Anuncios</string>
     <string name="refresh">Refrescar</string>
+
     <string name="gate">Sala</string>
+    <string name="gate_number">Sala %s</string>
     <string name="gate_heading">Ingrese su número de sala:</string>
     <string name="gate_button">Ir</string>
     <string name="gate_upcoming">Salidas próximo:</string>
+
+    <string name="flight_name_prefix">Salida %s</string>
+    <string name="flight_to">destino %s</string>
+
     <string name="no_server">No se pudo conectar al servidor.</string>
     <string name="no_flights">No se pudo obtener los salidas del servidor.</string>
     <string name="bad_gate">La sala no encontrada.</string>
     <string name="no_messages">No se pudo obtener los anuncios del servidor.</string>
     <string name="no_translate">No se pudo traducir los anuncios.</string>
-    <string name="title_activity_gate">Sala</string>
 </resources>
