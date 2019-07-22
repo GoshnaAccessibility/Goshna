@@ -225,6 +225,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(mContext, R.string.no_messages, Toast.LENGTH_LONG).show();
             }
         } else {
+            Toast.makeText(mContext, "Connected - new messages will appear when ready", Toast.LENGTH_SHORT).show(); // FIXME localise and strings.xml
             Log.d("GoshnaRefresh", "streamTask already running");
         }
     }
