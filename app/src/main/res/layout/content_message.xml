@@ -20,6 +20,24 @@
         android:textStyle="bold"
         android:textSize="20sp"/>
 
+    <ProgressBar
+        android:id="@+id/progress_announcements_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
+
+    <TextView
+        android:id="@+id/text_no_messages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8sp"
+        android:layout_marginTop="8sp"
+        android:layout_marginRight="8sp"
+        android:text="@+string/gate_no_messages"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cards"
         android:layout_width="match_parent"

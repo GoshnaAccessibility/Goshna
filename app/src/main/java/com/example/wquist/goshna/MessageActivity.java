@@ -16,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,10 +70,24 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                     v.vibrate(150);
                 }
             }
+
+            // Hide default 'no messages' message
+            TextView t = findViewById(R.id.text_no_messages);
+            t.setVisibility(View.GONE);
+
             Toast.makeText(mContext, iNewMessages + " new messages", Toast.LENGTH_SHORT).show();
         } else {
+            if (mMessages.size() == 0) {
+                // Show default 'no messages' message
+                TextView t = findViewById(R.id.text_no_messages);
+                t.setVisibility(View.VISIBLE);
+            }
             Toast.makeText(mContext, "No new messages", Toast.LENGTH_SHORT).show();
         }
+
+        // Remove the indefinite Loading ProgressBar
+        ProgressBar pb = findViewById(R.id.progress_announcements_loading);
+        pb.setVisibility(View.GONE);
     }
 
     @Override
@@ -139,12 +155,15 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
     public void refresh() {
         if(streamTask.getStatus() != AsyncTask.Status.RUNNING) {
+            Log.d("GoshnaRefresh", "Starting new streamTask");
             try {
                 streamTask.execute(new URL(Goshna.getFlightMessagesStreamUrl(mFlightId)));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 Toast.makeText(mContext, R.string.no_messages, Toast.LENGTH_LONG).show();
             }
+        } else {
+            Log.d("GoshnaRefresh", "streamTask already running");
         }
     }
 

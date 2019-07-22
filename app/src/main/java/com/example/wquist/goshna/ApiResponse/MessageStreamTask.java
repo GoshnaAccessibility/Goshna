@@ -1,6 +1,7 @@
 package com.example.wquist.goshna.ApiResponse;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.wquist.goshna.Api.Message;
 
@@ -23,6 +24,7 @@ public class MessageStreamTask extends AsyncTask<URL, MessageResponse, Void> {
     protected Void doInBackground(URL... urls) {
         try {
             for (URL url : urls) {
+                Log.d("GoshnaServerMessage", "Connecting");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 readStream(new BufferedInputStream(urlConnection.getInputStream()));
             }
@@ -53,6 +55,7 @@ public class MessageStreamTask extends AsyncTask<URL, MessageResponse, Void> {
                                     message.getString("body"),
                                     message.getInt("time")));
                         }
+                        Log.d("GoshnaServerMessage", "Received: " + newMessages.toString());
                         publishProgress(new MessageResponse(newMessages));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -62,6 +65,7 @@ public class MessageStreamTask extends AsyncTask<URL, MessageResponse, Void> {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            Log.d("GoshnaServerMessage", "Cleaning up InputStream");
             if (reader != null) {
                 try {
                     reader.close();

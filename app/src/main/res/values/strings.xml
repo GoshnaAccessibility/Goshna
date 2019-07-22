@@ -10,6 +10,7 @@
     <string name="gate_heading">Enter your gate number:</string>
     <string name="gate_button">GO</string>
     <string name="gate_upcoming">Flights departing soon:</string>
+    <string name="gate_no_messages">No messages yet</string>
 
     <string name="flight_name_prefix">Flight %s</string>
     <string name="flight_to">to %s</string>
