@@ -182,6 +182,18 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void refresh() {
+        if(streamTask.getStatus() == AsyncTask.Status.FINISHED) {
+            // TODO migrate to using a Service instead of AsyncTask
+            Log.d("GoshnaRefresh", "Restarting streamTask");
+            streamTask = new MessageStreamTask() {
+                @Override
+                protected void onProgressUpdate(MessageResponse... values) {
+                    for(MessageResponse msgResponse : values){
+                        addMessagesToList(msgResponse);
+                    }
+                }
+            };
+        }
         if(streamTask.getStatus() != AsyncTask.Status.RUNNING) {
             Log.d("GoshnaRefresh", "Starting new streamTask");
             try {
