@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,8 +35,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private int mFlightId;
     private String mFlightName;
     private String mGateNumber;
-
-    private RecyclerView mRecycler;
 
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
@@ -108,7 +108,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         TextView txtGateNumber = findViewById(R.id.announcements_gate_id);
         txtGateNumber.setText(String.format("%s " + mGateNumber, getResources().getString(R.string.gate)));
 
-        mRecycler = findViewById(R.id.cards);
+        RecyclerView mRecycler = findViewById(R.id.cards);
 
         RecyclerView.LayoutManager lm = new GridLayoutManager(this, 1);
         mRecycler.setLayoutManager(lm);
@@ -127,6 +127,34 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     public void onResume() {
         super.onResume();
         refresh();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Warn user about not getting any more notifications for this gate
+        new AlertDialog.Builder(mContext) // FIXME: needs localization
+                .setTitle("Flight " + mFlightName + " at Gate " + mGateNumber)
+                .setMessage("If you go back you will not receive any more notifications for " +
+                        "Gate " + mGateNumber + ". Continue?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        MessageActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d("GoshnaMessageActivity", "Activity Destroyed - Cancelling streamTask");
+        streamTask.cancel(true);
     }
 
     @Override
