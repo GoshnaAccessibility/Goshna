@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Goshna</string>
 
     <string name="title_activity_gate">Gate</string>
-    <string name="title_activity_message">Announcements</string>
+    <string name="title_activity_message">Gate Announcements</string>
     <string name="refresh">Refresh</string>
 
     <string name="gate">Gate</string>

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="title_activity_gate">Sala</string>
-    <string name="title_activity_message">Anuncios</string>
+    <string name="title_activity_message">Sala Anuncios</string>
     <string name="refresh">Refrescar</string>
 
     <string name="gate">Sala</string>

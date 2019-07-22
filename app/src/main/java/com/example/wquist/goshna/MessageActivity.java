@@ -106,7 +106,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         mGateNumber = i.getStringExtra(GateActivity.GATE_NUMBER);
 
         TextView txtGateNumber = findViewById(R.id.announcements_gate_id);
-        txtGateNumber.setText(String.format("%s " + mGateNumber, getResources().getString(R.string.gate)));
+        txtGateNumber.setText(String.format(getResources().getString(R.string.gate_number), mGateNumber));
+
+        TextView txtFlightNumber = findViewById(R.id.announcements_flight_id);
+        txtFlightNumber.setText(String.format(getResources().getString(R.string.flight_name_prefix), mFlightName));
 
         RecyclerView mRecycler = findViewById(R.id.cards);
 
@@ -117,8 +120,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         mAdapter = new MessagesAdapter(this, mMessages, mFlightName);
         mRecycler.setAdapter(mAdapter);
 
-        String annPrefix = getResources().getString(R.string.title_activity_message);
-        setTitle(annPrefix + ": " + getResources().getString(R.string.gate) + " " + mGateNumber + " (" + mFlightName + ")");
+        setTitle(getResources().getString(R.string.title_activity_message));
 
         refresh();
     }
