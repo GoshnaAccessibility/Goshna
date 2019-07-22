@@ -50,6 +50,7 @@ public class MessageStreamTask extends AsyncTask<URL, MessageResponse, Void> {
         try {
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+            publishProgress(null);
             while ((line = reader.readLine()) != null && !this.isCancelled()) {
                 if(line.startsWith("data:")) { // Only 'data:' part of SSE is currently used
                     // Example:

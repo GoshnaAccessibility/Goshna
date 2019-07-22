@@ -166,8 +166,18 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     MessageStreamTask streamTask = new MessageStreamTask() {
         @Override
         protected void onProgressUpdate(MessageResponse... values) {
-            for(MessageResponse msgResponse : values){
-                addMessagesToList(msgResponse);
+            if (values != null) {
+                for (MessageResponse msgResponse : values) {
+                    addMessagesToList(msgResponse);
+                }
+            } else {
+                // Connected - awaiting messages
+                // Show default 'no messages' message
+                TextView t = findViewById(R.id.text_no_messages);
+                t.setVisibility(View.VISIBLE);
+                // Remove the indefinite Loading ProgressBar
+                ProgressBar pb = findViewById(R.id.progress_announcements_loading);
+                pb.setVisibility(View.GONE);
             }
         }
     };
@@ -188,8 +198,18 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             streamTask = new MessageStreamTask() {
                 @Override
                 protected void onProgressUpdate(MessageResponse... values) {
-                    for(MessageResponse msgResponse : values){
-                        addMessagesToList(msgResponse);
+                    if (values != null) {
+                        for (MessageResponse msgResponse : values) {
+                            addMessagesToList(msgResponse);
+                        }
+                    } else {
+                        // Connected - awaiting messages
+                        // Show default 'no messages' message
+                        TextView t = findViewById(R.id.text_no_messages);
+                        t.setVisibility(View.VISIBLE);
+                        // Remove the indefinite Loading ProgressBar
+                        ProgressBar pb = findViewById(R.id.progress_announcements_loading);
+                        pb.setVisibility(View.GONE);
                     }
                 }
             };
