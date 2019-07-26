@@ -168,11 +168,13 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     MessageStreamTask streamTask = new MessageStreamTask() {
         @Override
         protected void onProgressUpdate(MessageResponse... values) {
-            if (values != null) {
-                for (MessageResponse msgResponse : values) {
-                    addMessagesToList(msgResponse);
-                }
-            } else {
+            onStreamTaskProgressUpdate(values);
+        }
+    };
+
+    private void onStreamTaskProgressUpdate(MessageResponse... values) {
+        for (MessageResponse msgResponse : values) {
+            if (msgResponse.isEmpty()) {
                 // Connected - awaiting messages
                 // Show default 'no messages' message
                 TextView t = findViewById(R.id.text_no_messages);
@@ -180,9 +182,12 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 // Remove the indefinite Loading ProgressBar
                 ProgressBar pb = findViewById(R.id.progress_announcements_loading);
                 pb.setVisibility(View.GONE);
+            } else {
+                // Messages received
+                addMessagesToList(msgResponse);
             }
         }
-    };
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -200,19 +205,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             streamTask = new MessageStreamTask() {
                 @Override
                 protected void onProgressUpdate(MessageResponse... values) {
-                    if (values != null) {
-                        for (MessageResponse msgResponse : values) {
-                            addMessagesToList(msgResponse);
-                        }
-                    } else {
-                        // Connected - awaiting messages
-                        // Show default 'no messages' message
-                        TextView t = findViewById(R.id.text_no_messages);
-                        t.setVisibility(View.VISIBLE);
-                        // Remove the indefinite Loading ProgressBar
-                        ProgressBar pb = findViewById(R.id.progress_announcements_loading);
-                        pb.setVisibility(View.GONE);
-                    }
+                    onStreamTaskProgressUpdate(values);
                 }
             };
         }
