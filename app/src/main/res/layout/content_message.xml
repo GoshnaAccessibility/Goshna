@@ -44,7 +44,7 @@
         android:layout_marginLeft="8sp"
         android:layout_marginTop="8sp"
         android:layout_marginRight="8sp"
-        android:text="@+string/gate_no_messages"
+        android:text="@string/gate_no_messages"
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="invisible" />
