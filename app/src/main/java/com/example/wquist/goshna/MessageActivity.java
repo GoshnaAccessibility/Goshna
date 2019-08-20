@@ -140,9 +140,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     public void onBackPressed() {
         // Warn user about not getting any more notifications for this gate
         new AlertDialog.Builder(mContext) // FIXME: needs localization
-                .setTitle("Flight " + mFlightName + " at Gate " + mGateNumber)
-                .setMessage("If you go back you will not receive any more notifications for " +
-                        "Gate " + mGateNumber + ". Continue?")
+                .setTitle("Gate " + mGateNumber)
+                .setMessage("Stop receiving notifications for this Gate?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         MessageActivity.this.finish();
