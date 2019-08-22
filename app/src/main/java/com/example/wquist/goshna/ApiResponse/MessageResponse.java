@@ -2,6 +2,7 @@ package com.example.wquist.goshna.ApiResponse;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.wquist.goshna.Api.Message;
@@ -17,7 +18,7 @@ public class MessageResponse {
      * An empty MessageResponse denotes a successful connection, but no messages yet.
      * This constructor should only be used once to demonstrate the successful connection.
      */
-    public MessageResponse() {}
+    public MessageResponse() { this.messages = new ArrayList<>(); }
 
     /**
      * Checks if MessageResponse is empty. This would only occur if this Response represents
