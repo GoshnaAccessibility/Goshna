@@ -1,5 +1,7 @@
 package com.example.wquist.goshna.ApiResponse;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import com.example.wquist.goshna.Api.Message;
@@ -27,6 +29,7 @@ public class MessageResponse {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "MessageResponse{" +
                 "messages=" + messages +
