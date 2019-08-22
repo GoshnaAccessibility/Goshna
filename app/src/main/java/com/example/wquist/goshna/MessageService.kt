@@ -22,9 +22,12 @@ import java.util.ArrayList
 
 class MessageService : Service() {
 
-    private val notificationChannelID = "com.example.wquist.goshna.messages"
+    private val notificationChannelIDConnStatus = "com.example.wquist.goshna.connection"
+    private val notificationChannelIDMessages = "com.example.wquist.goshna.messages"
     private val notificationForegroundID = 1
     private var notificationCounter = notificationForegroundID + 1
+    private lateinit var notificationBuilderConnStatus: NotificationCompat.Builder
+    private lateinit var notificationBuilderMessage: NotificationCompat.Builder
 
     private var streamTask = MessageStreamTask(this)
     var reportMessage: OnMessageReceivedListener? = null
@@ -96,27 +99,37 @@ class MessageService : Service() {
 
         // Create the NotificationChannel (Android O+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val descriptionText = "Announcements received from the airport for your Gate" // TODO localise
+            // Prepare generic notification channel elements
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel(
-                    notificationChannelID,
+            // Prepare the connection status channel
+            val connectionChannel = NotificationChannel(
+                    notificationChannelIDConnStatus,
+                    "Server connection status", // TODO localise
+                    importance
+            )
+            connectionChannel.description = "Displays the connection status of the server." // TODO localise
+            // Prepare Messages channel
+            val msgChannel = NotificationChannel(
+                    notificationChannelIDMessages,
                     "Messages received", // TODO localise
                     importance
             )
-            mChannel.description = descriptionText
-            // Register the channel with the system; you can't change the importance
+            msgChannel.description = "Announcements received from the airport for your Gate" // TODO localise
+            // Register the channels with the system; you can't change the importance
             // or other notification behaviours after this
             with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
-                createNotificationChannel(mChannel)
+                createNotificationChannel(connectionChannel)
+                createNotificationChannel(msgChannel)
             }
         }
         // Put Service in foreground state (user should be aware this service is running)
         // TODO set action to load app and put in foreground
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, notificationChannelID)
-                .setContentTitle("Connecting...") // TODO localise
-                .setContentText("Connecting to server for airport gate announcements") // TODO localise
+        notificationBuilderConnStatus = NotificationCompat.Builder(applicationContext, notificationChannelIDConnStatus)
+                .setContentTitle("Pending") // TODO localise
+                .setContentText("Preparing to connect to the server") // TODO localise
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .setSmallIcon(R.drawable.ic_launcher_foreground) // TODO improve icon
+                .setGroup(notificationChannelIDConnStatus)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Create Action/Intent to stop the foreground service
             // TODO add button/text to cancel the connection/service
@@ -129,55 +142,12 @@ class MessageService : Service() {
 //            val stopAction = Notification.Action.Builder(null, "Stop", stopPendingIntent)
 //            notificationBuilder.addAction(stopAction.build())
         }
-        startForeground(notificationForegroundID, notificationBuilder.build())
+        startForeground(notificationForegroundID, notificationBuilderConnStatus.build())
 
-//        // TEST temp notification
-//        // TODO TEMP
-//        val thread = object : Thread() {
-//            override fun run() {
-//                //        Log.d("GoshnaService", "Url: $url")
-//                sleep(5000)
-//                // Show a test notification
-//                val anotherNotification = NotificationCompat.Builder(applicationContext, notificationChannelID)
-//                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-//                        .setContentTitle("New Announcement (test)")
-//                        .setContentText("Gate now open for boarding.")
-//                        .build()
-//                with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
-//                    notify(notificationCounter++, anotherNotification)
-////            // Example override existing notification
-////            val notification3 = NotificationCompat.Builder(applicationContext, notificationChannelID)
-////                    .setContentTitle("Connected") // TODO localise
-////                    .setCategory(Notification.CATEGORY_SERVICE)
-////                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-//////                .setLargeIcon(aBitmap)
-////                    .build()
-////            notify(1, notification3)
-//                }
-//
-//                // Update server connection notification
-//                sleep(5000) // TODO temp
-//                // TODO do this only once connected
-//                val notificationConnected = notificationBuilder
-//                        .setContentTitle("Connected") // TODO localise
-//                        .setContentText("Awaiting airport gate announcements") // TODO localise
-////                .setCategory(Notification.CATEGORY_SERVICE)
-////                .setSmallIcon(R.drawable.ic_launcher_foreground)
-//                        .build()
-//                with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
-//                    // Override the Foreground notification
-//                    notify(notificationForegroundID, notificationConnected)
-//                }
-//            }
-//        }
-//        thread.start()
-
-
-
-//        // TODO temp, delete this
-//        Log.d("GoshnaService", "Stopping after 10s sleep")
-//        Thread.sleep(10000)
-//        stopSelf()
+        // Prepare the Message received
+        notificationBuilderMessage = NotificationCompat.Builder(applicationContext, notificationChannelIDMessages)
+                .setSmallIcon(android.R.drawable.ic_dialog_email) // TODO use a custom icon
+                .setContentTitle("New message") // TODO localise
     }
 
     override fun onDestroy() {
@@ -190,6 +160,24 @@ class MessageService : Service() {
         super.onDestroy()
     }
 
+    fun notificationConnecting() {
+        notificationBuilderConnStatus
+                .setContentTitle("Connecting...") // TODO localise
+                .setContentText("Connecting to server for airport gate announcements") // TODO localise
+        with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
+            notify(notificationForegroundID, notificationBuilderConnStatus.build())
+        }
+    }
+
+    fun notificationConnected() {
+        notificationBuilderConnStatus
+                .setContentTitle("Connected") // TODO localise
+                .setContentText("Awaiting airport gate announcements") // TODO localise
+        with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
+            notify(notificationForegroundID, notificationBuilderConnStatus.build())
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     inner class MessageStreamTask internal constructor(context: MessageService) : AsyncTask<URL, MessageResponse, Void?>() {
         private val activityReference: MessageService = context
@@ -198,9 +186,11 @@ class MessageService : Service() {
         override fun doInBackground(vararg urls: URL): Void? {
             try {
                 for (url in urls) {
+                    notificationConnecting()
                     Log.d("GoshnaServerMessage", "Connecting")
                     val urlConnection = url.openConnection() as HttpURLConnection
                     connections.add(urlConnection)
+                    notificationConnected()
                     Log.d("GoshnaServerMessage", "Opening Buffered Input Stream")
                     readStream(BufferedInputStream(urlConnection.inputStream))
                 }
@@ -269,18 +259,15 @@ class MessageService : Service() {
             // Send to Activity through the Listener
             activityReference.reportMessage?.onMessageReceived(values)
 
-
-//            // Show a test notification
-//            // TODO show a notification for each new message
-//            // TODO if more than 3 batched messages (values.size), show 1 notification for "X New Messages"
-//            val anotherNotification = NotificationCompat.Builder(applicationContext, notificationChannelID)
-//                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-//                    .setContentTitle("New messages")
-//                    .setContentText("${values.size} new messages")
-//                    .build()
-//            with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
-//                notify(notificationCounter++, anotherNotification)
-//            }
+            // Show a notification for each message
+            with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
+                for (msgResponse in values) {
+                    for (msg in msgResponse.messages) {
+                        notificationBuilderMessage.setContentText(msg.body)
+                        notify(++notificationCounter, notificationBuilderMessage.build())
+                    }
+                }
+            }
         }
 
 //        override fun onPostExecute(result: Void?) {
