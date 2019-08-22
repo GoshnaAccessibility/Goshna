@@ -7,7 +7,7 @@ import com.example.wquist.goshna.Api.Message;
 public class MessageResponse {
     public List<Message> messages;
 
-    MessageResponse(List<Message> messages) {
+    public MessageResponse(List<Message> messages) {
         this.messages = messages;
     }
 
@@ -15,7 +15,7 @@ public class MessageResponse {
      * An empty MessageResponse denotes a successful connection, but no messages yet.
      * This constructor should only be used once to demonstrate the successful connection.
      */
-    MessageResponse() {}
+    public MessageResponse() {}
 
     /**
      * Checks if MessageResponse is empty. This would only occur if this Response represents

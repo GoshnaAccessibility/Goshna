@@ -4,17 +4,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -29,14 +32,22 @@ import android.widget.Toast;
 
 import com.example.wquist.goshna.Api.Message;
 import com.example.wquist.goshna.ApiResponse.MessageResponse;
-import com.example.wquist.goshna.ApiResponse.MessageStreamTask;
 
-public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
+import org.jetbrains.annotations.NotNull;
+
+public class MessageActivity extends AppCompatActivity implements View.OnClickListener, OnMessageReceivedListener {
     private Context mContext;
+
+    // Android Service
+    private MessageService.LocalBinder mServiceBinder;
+    private boolean mBound = false;
+
+    // Flight/gate info
     private int mFlightId;
     private String mFlightName;
     private String mGateNumber;
 
+    // Messages
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
 
@@ -130,6 +141,48 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         refresh();
     }
 
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            mServiceBinder = (MessageService.LocalBinder) service;
+            mBound = true;
+
+            // Set the listener for new incoming messages
+            mServiceBinder.setMessageListener(MessageActivity.this);
+            // Get previously cached messages
+            onMessageReceived(mServiceBinder.getCachedMessages());
+            // Connect
+            startServerConnection();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Bind to MessageService
+        Intent intent = new Intent(this, MessageService.class);
+        ContextCompat.startForegroundService(this, intent);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from MessageService
+        unbindService(connection);
+        mBound = false;
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -138,29 +191,33 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        // Warn user about not getting any more notifications for this gate
-        new AlertDialog.Builder(mContext) // FIXME: needs localization
-                .setTitle("Gate " + mGateNumber)
-                .setMessage("Stop receiving notifications for this Gate?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        MessageActivity.this.finish();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .show();
+        if (mBound) { // Actions only necessary if Service bound
+            // Warn user about not getting any more notifications for this gate
+            new AlertDialog.Builder(mContext) // FIXME: needs localization
+                    .setTitle("Gate " + mGateNumber)
+                    .setMessage("Stop receiving notifications for this Gate?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Finish and Destroy this Activity (also forces Service to stop)
+                            MessageActivity.this.finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .show();
+        }
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
         Log.d("GoshnaMessageActivity", "Activity Destroyed - Cancelling streamTask");
-        streamTask.cancel(true);
+
+        mServiceBinder.stop(true);
     }
 
     @Override
@@ -169,14 +226,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
-    MessageStreamTask streamTask = new MessageStreamTask() {
-        @Override
-        protected void onProgressUpdate(MessageResponse... values) {
-            onStreamTaskProgressUpdate(values);
-        }
-    };
-
-    private void onStreamTaskProgressUpdate(MessageResponse... values) {
+    @Override
+    public void onMessageReceived(@NotNull MessageResponse... values) {
         for (MessageResponse msgResponse : values) {
             if (msgResponse.isEmpty()) {
                 // Connected - awaiting messages
@@ -202,29 +253,21 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 
-    public void refresh() {
-        if(streamTask.getStatus() == AsyncTask.Status.FINISHED) {
-            // TODO migrate to using a Service instead of AsyncTask
-            Log.d("GoshnaRefresh", "Restarting streamTask");
-            streamTask = new MessageStreamTask() {
-                @Override
-                protected void onProgressUpdate(MessageResponse... values) {
-                    onStreamTaskProgressUpdate(values);
-                }
-            };
-        }
-        if(streamTask.getStatus() != AsyncTask.Status.RUNNING) {
-            Log.d("GoshnaRefresh", "Starting new streamTask");
+    public void startServerConnection() {
+        // Start listening for messages from the server
+        if (mBound) {
             try {
-                streamTask.execute(new URL(Goshna.getFlightMessagesStreamUrl(mFlightId)));
+                mServiceBinder.start(this, new URL(Goshna.getFlightMessagesStreamUrl(mFlightId)));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                Log.e("GoshnaService", "MalformedURLException for Gate " + mGateNumber, e);
                 Toast.makeText(mContext, R.string.no_messages, Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(mContext, "Connected - new messages will appear when ready", Toast.LENGTH_SHORT).show(); // FIXME localise and strings.xml
-            Log.d("GoshnaRefresh", "streamTask already running");
         }
+    }
+
+    public void refresh() {
+        startServerConnection();
     }
 
     @Override
