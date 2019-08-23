@@ -60,7 +60,7 @@ class MessageService : Service() {
         fun start(context: Context, url: URL) {
             if (streamTask.status == AsyncTask.Status.RUNNING) {
                 // Already running
-                Toast.makeText(context, "Connected - new messages will appear when ready", Toast.LENGTH_SHORT).show() // FIXME localise and strings.xml
+                Toast.makeText(context, "Connected - new announcements will appear when ready", Toast.LENGTH_SHORT).show() // FIXME localise and strings.xml
                 return
             } else if(streamTask.status == AsyncTask.Status.FINISHED) {
                 // Re-init streamTask
@@ -147,7 +147,7 @@ class MessageService : Service() {
         // Prepare the Message received
         notificationBuilderMessage = NotificationCompat.Builder(applicationContext, notificationChannelIDMessages)
                 .setSmallIcon(android.R.drawable.ic_dialog_email) // TODO use a custom icon
-                .setContentTitle("New message") // TODO localise
+                .setContentTitle("New announcement") // TODO localise
     }
 
     override fun onDestroy() {
