@@ -152,12 +152,17 @@ public class GateActivity extends AppCompatActivity {
         mGate.setOnKeyListener(inputCallback);
 
         mSubmit.setEnabled(false);
-        Goshna.getApi().getAllFlights(allFlightsCallback);
     }
 
     public void submit(View v) {
         mSubmit.setEnabled(false);
 
         Goshna.getApi().findFlight(mGate.getText().toString(), flightCallback);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Goshna.getApi().getAllFlights(allFlightsCallback);
     }
 }
