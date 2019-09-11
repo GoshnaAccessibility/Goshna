@@ -263,6 +263,7 @@ class MessageService : Service() {
             with(getSystemService(NOTIFICATION_SERVICE) as NotificationManager) {
                 for (msgResponse in values) {
                     for (msg in msgResponse.messages) {
+                        notificationBuilderMessage.setContentTitle("New announcement - ${msg.getTime()}") // TODO internationalise
                         notificationBuilderMessage.setContentText(msg.body)
                         notify(++notificationCounter, notificationBuilderMessage.build())
                     }
