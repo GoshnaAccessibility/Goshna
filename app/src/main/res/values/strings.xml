@@ -12,6 +12,7 @@
     <string name="gate_edittext_hint">Gate number</string>
     <string name="gate_button">Follow announcements</string>
     <string name="gate_upcoming">Or, select an upcoming flight:</string>
+    <string name="gate_upcoming_none">No upcoming flights</string>
     <string name="gate_no_messages">No messages yet</string>
 
     <string name="flight_name_prefix">Flight %s</string>

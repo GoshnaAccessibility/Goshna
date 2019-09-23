@@ -75,12 +75,13 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/textview_upcoming_flight_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
         android:text="@string/gate_upcoming"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 

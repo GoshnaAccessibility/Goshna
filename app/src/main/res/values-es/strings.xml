@@ -12,6 +12,7 @@
     <string name="gate_edittext_hint">Número de puerta</string>
     <string name="gate_button">Sigue los anuncios</string>
     <string name="gate_upcoming">O seleccione un próximo vuelo:</string>
+    <string name="gate_upcoming_none">No hay próximos vuelos</string>
     <string name="gate_no_messages">Ningún mensaje</string>
 
     <string name="flight_name_prefix">Salida %s</string>

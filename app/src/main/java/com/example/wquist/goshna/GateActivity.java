@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -62,10 +63,15 @@ public class GateActivity extends AppCompatActivity {
     private Callback<FlightResponse> allFlightsCallback = new Callback<FlightResponse>() {
         @Override
         public void success(FlightResponse response, Response clientResponse) {
-            mSubmit.setEnabled(true);
+            mSubmit.setEnabled(true); // TODO disable/enable button based on EditText being non-null
 
             mFlights.clear();
-            mFlights.addAll(response.flights);
+            if(response.flights.size() > 0) {
+                mFlights.addAll(response.flights);
+                ((TextView) findViewById(R.id.textview_upcoming_flight_header)).setText(R.string.gate_upcoming);
+            } else {
+                ((TextView) findViewById(R.id.textview_upcoming_flight_header)).setText(R.string.gate_upcoming_none);
+            }
 
             mAdapter.notifyDataSetChanged();
         }
