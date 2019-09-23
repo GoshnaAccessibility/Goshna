@@ -4,12 +4,14 @@
     <string name="title_activity_gate">Sala</string>
     <string name="title_activity_message">Sala Anuncios</string>
     <string name="refresh">Refrescar</string>
+    <string name="airline_logo">Logotipo de la aerolínea</string>
 
     <string name="gate">Sala</string>
     <string name="gate_number">Sala %s</string>
     <string name="gate_heading">Ingrese su número de sala:</string>
-    <string name="gate_button">Ir</string>
-    <string name="gate_upcoming">Salidas próximo:</string>
+    <string name="gate_edittext_hint">Número de puerta</string>
+    <string name="gate_button">Sigue los anuncios</string>
+    <string name="gate_upcoming">O seleccione un próximo vuelo:</string>
     <string name="gate_no_messages">Ningún mensaje</string>
 
     <string name="flight_name_prefix">Salida %s</string>
