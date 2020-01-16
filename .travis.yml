@@ -1,0 +1,32 @@
+language: android
+dist: trusty
+
+env:
+  global:
+    - ANDROID_TARGET=android-29
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-29.0.2
+    - $ANDROID_TARGET
+    # - $ANDROID_IMAGE_TARGET
+    # - $ANDROID_IMAGE
+
+# Cache management for Android projects (recommended by Travis CI)
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+script:
+    # Build and Unit tests
+    - ./gradlew build
+    # Build, test, then Instrumentation tests (Default script)
+    # Requires set-up of an emulator and Android System Image
+    # - ./gradlew build connectedCheck
