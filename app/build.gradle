@@ -26,6 +26,9 @@ android {
             boolean disableCrashlytics = "true".equalsIgnoreCase("$System.env.NO_CRASHLYTICS")
             ext.enableCrashlytics = !disableCrashlytics
         }
+        debug {
+            ext.enableCrashlytics = false
+        }
     }
 }
 
