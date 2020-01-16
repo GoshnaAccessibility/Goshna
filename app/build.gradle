@@ -19,6 +19,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Check for "NO_CRASHLYTICS" Env Var
+            // Useful for Continuous Integration builds, e.g., when "google-services.json"
+            // not avaiable (not in repo).
+            boolean disableCrashlytics = "true".equalsIgnoreCase("$System.env.NO_CRASHLYTICS")
+            ext.enableCrashlytics = !disableCrashlytics
         }
     }
 }
