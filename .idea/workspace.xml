@@ -12,15 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="588fca28-facf-429a-946c-386b57cd19a7" name="Default" comment="Gate Activity: Show different text if no upcoming flights listed.">
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/wquist/goshna/MessageService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/wquist/goshna/MessageService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -545,7 +539,21 @@
       <option name="project" value="LOCAL" />
       <updated>1579260977183</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Chore: Upgraded Gradle and Kotlin deps">
+      <created>1599124710748</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1599124710748</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Chore: Migrate Crashlytics from Fabric (deprecated) to Firebase">
+      <created>1599125117294</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1599125117294</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -575,12 +583,22 @@
     <MESSAGE value="Test, CI: Always disable Crashlytics for Debug builds" />
     <MESSAGE value="Test, CI: Fixed (hopefully, finally) Travis CI support for Crashlytics with deliberately missing google-services.json file." />
     <MESSAGE value="README: Addded Maintainability badge" />
-    <option name="LAST_COMMIT_MESSAGE" value="README: Addded Maintainability badge" />
+    <MESSAGE value="Chore: Upgraded Gradle and Kotlin deps" />
+    <MESSAGE value="Chore: Migrate Crashlytics from Fabric (deprecated) to Firebase" />
+    <option name="LAST_COMMIT_MESSAGE" value="Chore: Migrate Crashlytics from Fabric (deprecated) to Firebase" />
   </component>
   <component name="WindowStateProjectService">
     <state x="463" y="383" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1599124112731">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="463" y="383" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1500.960@0.0.1500.960" timestamp="1599124112731" />
+    <state x="277" y="86" key="CommitChangelistDialog2" timestamp="1599125116649">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state x="277" y="86" key="CommitChangelistDialog2/0.0.1500.960@0.0.1500.960" timestamp="1599125116649" />
+    <state x="309" y="224" key="Vcs.Push.Dialog.v2" timestamp="1599124714034">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state x="309" y="224" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1599124714034" />
   </component>
 </project>
