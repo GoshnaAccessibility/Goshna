@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-// Firebase/Fabric Crashlytics plugin.
-apply plugin: 'io.fabric'
+// Crashlytics Gradle plugin
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -18,15 +18,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            // Check for "NO_CRASHLYTICS" Env Var
-            // Useful for Continuous Integration builds, e.g., when "google-services.json"
-            // not avaiable (not in repo).
-            boolean disableCrashlytics = "true".equalsIgnoreCase("$System.env.NO_CRASHLYTICS")
-            ext.enableCrashlytics = !disableCrashlytics
-        }
-        debug {
-            ext.enableCrashlytics = false
         }
     }
 }
@@ -39,9 +30,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.0.0'
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    // Firebase Crashlytics
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-analytics:17.5.0'
+    // Firebase Crashlytics SDK.
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.1'
     // Testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
