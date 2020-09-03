@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - "**.gitignore"
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "**.gitignore"
+      - "**.md"
+
+jobs:
+  test:
+    name: Build
+    # Run on macOS, as currently it is only runner with hardware acceleration (HAXM) installed
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            app/build
+            !app/build/jacoco
+            !app/build/outputs
+            !app/build/reports
+            !app/build/test-results
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      # Build
+      - name: Build
+        # Crashlytics fix (prepare a mock 'google-services.json' config file):
+        # Json file not in repo (privacy), but Crashlytics fails otherwise
+        # Instead, copy a mock version of the file. Gradle builds should disable the Crashlytics
+        # collection/reporting too, but without this it fails to build.
+        run: |
+          cp ./mock/google-services.json ./app/google-services.json
+          ./gradlew build
